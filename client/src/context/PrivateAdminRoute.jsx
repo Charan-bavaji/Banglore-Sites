@@ -4,9 +4,10 @@ import { useAuth } from "../context/AuthContext";
 const PrivateAdminRoute = ({ children }) => {
   const { user } = useAuth();
 
-  if (!user || user.email !== "admin@example.com") {
-    return <Navigate to="/" />;
-  }
+if (!user || user.role !== "admin") {
+  return <Navigate to="/" />;
+}
+
 
   return children;
 };

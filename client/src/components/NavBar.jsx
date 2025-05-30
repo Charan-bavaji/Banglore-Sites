@@ -53,7 +53,7 @@ const NavBar = () => {
           )}
 
           {/* Admin Button if user is admin */}
-          {user?.email === "admin@example.com" && (
+          {user?.role === "admin" && (
             <Link
               to="/admin"
               className="text-gray-black hover:text-black font-semibold transform transition duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl"
@@ -128,7 +128,7 @@ const NavBar = () => {
               )
             )}
 
-            {user?.email === "admin@example.com" && (
+            {user?.role === "admin" && (
               <Link
                 to="/admin"
                 onClick={() => setIsOpen(false)}
