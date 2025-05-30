@@ -18,6 +18,7 @@ import AllUserDetails from "./components/Admin/AllUserDetails";
 import Analytics from "./components/Analytics";
 import { ToastContainer } from "react-toastify";
 import BlogPage from "./components/BlogPage";
+import PrivateAdminRoute from "./context/PrivateAdminRoute";
 function App() {
   return (
     <Router>
@@ -31,7 +32,14 @@ function App() {
         <Route path="/construction" element={<Construction />} />
         <Route path="/land-details" element={<LandDetailed />} />
         <Route path="/lands" element={<LandList />} />
-        <Route path="/admin" element={<Dashboard />}>
+        <Route
+          path="/admin"
+          element={
+            <PrivateAdminRoute>
+              <Dashboard />
+            </PrivateAdminRoute>
+          }
+        >
           <Route index element={<AddLand />} />
           <Route path="add-land" element={<AddLand />} />
           <Route path="land-list" element={<AllLandList />} />

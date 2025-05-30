@@ -41,6 +41,16 @@ const AuthModal = ({ type = "login", onClose }) => {
 
         {/* Login / Signup Form */}
         <form className="flex flex-col space-y-3">
+          {type != "login" && (
+            <div>
+              <label className="text-sm font-medium">User Name</label>
+              <input
+                type="text"
+                className="w-full border px-3 py-2 rounded mt-1"
+                placeholder="user name"
+              />
+            </div>
+          )}
           <div>
             <label className="text-sm font-medium">Email</label>
             <input
