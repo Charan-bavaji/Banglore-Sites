@@ -26,11 +26,11 @@ const AuthModal = ({ type = "login", onClose }) => {
       type === "login"
         ? { phone: formData.phone, password: formData.password }
         : {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            password: formData.password,
-          };
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password,
+        };
 
     try {
       const res = await fetch(endpoint, {

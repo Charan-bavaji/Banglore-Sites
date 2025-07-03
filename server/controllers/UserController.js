@@ -147,4 +147,3 @@ exports.getAllContact = async (req, res) => {
         return res.status(500).json({ message: "Error submitting contact form", error });
     }
 }
-

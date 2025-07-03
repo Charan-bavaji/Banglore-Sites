@@ -29,14 +29,28 @@ exports.getTopLands = async (req, res) => {
 
 exports.addLand = async (req, res) => {
     try {
-        const { title, location, price, persqft, area, propertyType, approval, facing, ownerShip, amenitiesNearby, roadinfront, waterandelectricity, distancefromL, emiloan } = req.body;
-        const landDetails = { title, location, price, persqft, area, propertyType, approval, facing, ownerShip, amenitiesNearby, roadinfront, waterandelectricity, distancefromL, emiloan }
+        const {
+            title, location, price, persqft, area, propertyType,
+            approval, facing, ownerShip, amenitiesNearby,
+            roadinfront, waterandelectricity, distancefromL, emiloan
+        } = req.body;
+
+        // Get secure Cloudinary URLs
+        const images = req.files.map(file => file.path); // file.path is now a URL
+
+        const landDetails = {
+            title, location, price, persqft, area, propertyType,
+            approval, facing, ownerShip, amenitiesNearby,
+            roadinfront, waterandelectricity, distancefromL, emiloan,
+            images
+        };
+
         await Lands.create(landDetails);
-       return res.status(200).json({ message: "Successfully listed land" });
+        return res.status(200).json({ message: "Successfully listed land" });
     } catch (error) {
-      return  res.status(500).json({ message: "error adding lands", error })
+        return res.status(500).json({ message: "Error adding land", error });
     }
-}
+};
 
 exports.getLandDetails = async (req, res) => {
     try {

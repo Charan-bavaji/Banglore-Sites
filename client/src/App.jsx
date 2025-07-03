@@ -18,11 +18,13 @@ import AllUserDetails from "./components/Admin/AllUserDetails";
 import Analytics from "./components/Analytics";
 import { ToastContainer } from "react-toastify";
 import BlogPage from "./components/BlogPage";
+import { Toaster } from 'react-hot-toast';
 import PrivateAdminRoute from "./context/PrivateAdminRoute";
 function App() {
   return (
     <Router>
       <ToastContainer />
+      <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
