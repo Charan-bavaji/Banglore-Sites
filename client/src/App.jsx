@@ -32,7 +32,7 @@ function App() {
         <Route path="/oto-business" element={<OtoB />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/construction" element={<Construction />} />
-        <Route path="/land-details" element={<LandDetailed />} />
+        <Route path="/land-details/:id" element={<LandDetailed />} />
         <Route path="/lands" element={<LandList />} />
         <Route
           path="/admin"

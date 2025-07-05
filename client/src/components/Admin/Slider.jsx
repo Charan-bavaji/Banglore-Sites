@@ -15,9 +15,8 @@ const Slider = () => {
 
   return (
     <div
-      className={`${
-        isOpen ? "w-64" : "w-16"
-      } h-screen bg-white shadow-md transition-all duration-300 ease-in-out flex flex-col`}
+      className={`${isOpen ? "w-64" : "w-16"
+        } h-screen bg-white shadow-md transition-all duration-300 ease-in-out flex flex-col`}
     >
       {/* Toggle Button */}
       <div className="hidden md:flex items-center justify-between px-4 py-4 border-b">
@@ -51,14 +50,6 @@ const Slider = () => {
         >
           <Users size={20} />
           {isOpen && <span>User Details</span>}
-        </Link>
-
-        <Link
-          to="/admin/analytics"
-          className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
-        >
-          <BarChart2 size={20} />
-          {isOpen && <span>Analytics</span>}
         </Link>
       </nav>
     </div>

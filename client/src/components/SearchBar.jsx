@@ -1,70 +1,63 @@
 import { useState } from "react";
-import { ChevronDown, Search } from "lucide-react";
+import { ChevronDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+const cities = ["Bangalore", "Anekal", "Jigani", "Bannerghatta", "Attibele"];
+const landTypes = ["Residential", "Commercial"];
 
 const SearchBar = () => {
-  //   const [city, setCity] = useState("Bangaluru");
-  //   const [landType, setLandType] = useState("Land/Plots");
-  const [residential, setResidential] = useState(true);
-  const [commercial, setCommercial] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
+  const [selectedCity, setSelectedCity] = useState("Bangalore");
+  const [selectedType, setSelectedType] = useState("Residential");
+  const [showCityDropdown, setShowCityDropdown] = useState(false);
+  const [showTypeDropdown, setShowTypeDropdown] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    navigate(`/lands?city=${selectedCity}&type=${selectedType}`);
+  };
 
   return (
-    <div className="bg-black/10 backdrop-blur-xs rounded-2xl shadow-lg px-4 py-6 w-full space-y-4 text-white">
-      <div className="flex flex-col md:flex-row items-center gap-4">
-        {/* City Dropdown (Static) */}
-        <div className="flex items-center gap-2">
-          <span className="font-medium">Bengaluru</span>
-        </div>
+    <div className="bg-white rounded-2xl shadow-lg px-4 py-4 md:px-6 md:py-5 w-fit text-black">
+      <div className="flex flex-row md:flex-row items-center gap-2 md:gap-4 text-sm md:text-base">
 
-        {/* Land Type Dropdown (Static) */}
-        <div
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={() => setShowFilters(!showFilters)}
-        >
-          <span className="font-medium ">Land/Plots</span>
-          <ChevronDown size={16} className="" />
-        </div>
-
-        {/* Search Input */}
-        <div className="flex items-center bg-white rounded-md px-4 py-2 w-full md:flex-1">
-          <Search className="text-gray-500 mr-2" />
-          <input
-            type="text"
-            placeholder="Search for bengaluru lands..."
-            className="w-full outline-none bg-transparent text-gray-800"
-          />
+        {/* City Dropdown */}
+        <div className="relative w-fit">
+          <div
+            className="flex items-center justify-between border px-3 py-1.5 md:px-4 md:py-2 rounded-md cursor-pointer min-w-[100px] md:min-w-[150px]"
+            onClick={() => setShowCityDropdown(!showCityDropdown)}
+          >
+            <span className="truncate">{selectedCity}</span>
+            <ChevronDown size={14} className="ml-1" />
+          </div>
+          {showCityDropdown && (
+            <ul className="absolute z-10 bg-white text-black mt-2 rounded shadow-md min-w-[100px] md:min-w-[150px]">
+              {cities.map((city) => (
+                <li
+                  key={city}
+                  onClick={() => {
+                    setSelectedCity(city);
+                    setShowCityDropdown(false);
+                  }}
+                  className="px-3 py-1.5 md:px-4 md:py-2 hover:bg-gray-100 cursor-pointer"
+                >
+                  {city}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         {/* Search Button */}
-        <button className="bg-black cursor-pointer text-white px-6 py-2 rounded-full hover:bg-green-800 transform transition duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl">
+        <button
+          onClick={handleSearch}
+          className="bg-black text-white px-4 py-1.5 md:px-6 md:py-2 rounded-full hover:bg-green-800 transition duration-300 text-sm md:text-base"
+        >
           Search
         </button>
       </div>
-
-      {/* Filter Dropdown */}
-      {showFilters && (
-        <div className="flex items-center gap-4 px-2">
-          <label className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              checked={residential}
-              onChange={() => setResidential(!residential)}
-              className="accent-green-900"
-            />
-            Residential
-          </label>
-          <label className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              checked={commercial}
-              onChange={() => setCommercial(!commercial)}
-              className="accent-green-900"
-            />
-            Commercial
-          </label>
-        </div>
-      )}
     </div>
+
   );
 };
 

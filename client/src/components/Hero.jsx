@@ -5,21 +5,19 @@ import Contact from './Contact';
 import OtoB from './OtoB';
 import DreamPlots from './DreamPlots';
 const Hero = () => {
-    return (
-        <section className="relative w-full h-[90vh] bg-cover bg-center"
-         style={{ backgroundImage:`url(${hero_bg})` }}
-         >
-          {/* Overlay */}
-        <div className="absolute inset-0 bg-black/20" />
-    
-          {/* Content */}
-          <div className="relative z-10 h-full flex items-center justify-center">
-            <div className="text-center px-4 w-full max-w-2xl">
-              <SearchBar />
-            </div>
-          </div>
-        </section>
-      );
+  return (
+    <section className="relative w-full  bg-cover bg-center h-[50vh] md:h-[90vh]"
+      style={{ backgroundImage: `url(${hero_bg})` }}
+    >
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/20" />
+
+      {/* Content */}
+      <div className="relative z-10 h-full flex items-center justify-center">
+        <SearchBar />
+      </div>
+    </section>
+  );
 }
 
 export default Hero;

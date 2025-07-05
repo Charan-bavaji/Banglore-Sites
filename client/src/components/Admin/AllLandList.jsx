@@ -27,10 +27,20 @@ const AllLandList = () => {
   }, []);
 
 
-  const handleDelete = (id) => {
-    setLands((prevLands) => prevLands.filter((land) => land._id !== id));
-    toast.success("Deleted from UI (not DB)");
+  const handleDelete = async (id) => {
+    const confirm = window.confirm("Are you sure you want to delete this land?");
+    if (!confirm) return;
+
+    try {
+      await axios.delete(`http://localhost:5000/api/v1/deleteLand/${id}`);
+      setLands((prevLands) => prevLands.filter((land) => land._id !== id));
+      toast.success("Land deleted successfully ✅");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete land ❌");
+    }
   };
+
   const filteredLands = lands.filter(
     (land) =>
       land?.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||

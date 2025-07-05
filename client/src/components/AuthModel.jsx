@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const AuthModal = ({ type = "login", onClose }) => {
   const { login } = useAuth();
@@ -10,6 +11,8 @@ const AuthModal = ({ type = "login", onClose }) => {
     phone: "",
     password: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -22,6 +25,7 @@ const AuthModal = ({ type = "login", onClose }) => {
       type === "login"
         ? "http://localhost:5000/api/v1/login"
         : "http://localhost:5000/api/v1/register";
+
     const payload =
       type === "login"
         ? { phone: formData.phone, password: formData.password }
@@ -33,6 +37,7 @@ const AuthModal = ({ type = "login", onClose }) => {
         };
 
     try {
+      setLoading(true);
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -40,28 +45,31 @@ const AuthModal = ({ type = "login", onClose }) => {
       });
 
       const data = await res.json();
+      setLoading(false);
 
       if (!res.ok) {
-        alert(data.message || "Authentication failed");
+        toast.error(data.message || "Authentication failed");
         return;
       }
 
       if (type === "login") {
-        login(data.user); // Login response has user info
+        login(data.user);
+        toast.success("Logged in successfully!");
       } else {
-        // After successful registration, call login with minimal info or fetch it
         login({
           id: data.userId,
           name: formData.name,
           phone: formData.phone,
           email: formData.email,
         });
+        toast.success("Registered successfully!");
       }
 
-      onClose(); // Close modal
+      onClose();
     } catch (err) {
       console.error("Auth error:", err);
-      alert("Something went wrong");
+      setLoading(false);
+      toast.error("Something went wrong");
     }
   };
 
@@ -79,52 +87,34 @@ const AuthModal = ({ type = "login", onClose }) => {
           {type === "login" ? "Login to your account" : "Create a new account"}
         </h2>
 
-        {/* <button
-          className="w-full border border-gray-300 rounded py-2 flex items-center justify-center gap-2 hover:bg-gray-50 mb-4"
-          onClick={() => alert("Handle Google login here")}
-        >
-          <img
-            src="https://www.svgrepo.com/show/475656/google-color.svg"
-            alt="Google"
-            className="w-5 h-5"
-          />
-          <span className="text-sm font-medium text-gray-700">
-            Continue with Google
-          </span>
-        </button> */}
-
-        {/* <div className="flex items-center gap-2 mb-4">
-          <hr className="flex-grow border-gray-300" />
-          <span className="text-xs text-gray-400">or</span>
-          <hr className="flex-grow border-gray-300" />
-        </div> */}
-
         <form className="flex flex-col space-y-3" onSubmit={handleSubmit}>
           {type !== "login" && (
-            <div>
-              <label className="text-sm font-medium">User Name</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full border px-3 py-2 rounded mt-1"
-                placeholder="User name"
-              />
-            </div>
-          )}
-          {type !== "login" && (
-            <div>
-              <label className="text-sm font-medium">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full border px-3 py-2 rounded mt-1"
-                placeholder="you@example.com"
-              />
-            </div>
+            <>
+              <div>
+                <label className="text-sm font-medium">User Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full border px-3 py-2 rounded mt-1"
+                  placeholder="User name"
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full border px-3 py-2 rounded mt-1"
+                  placeholder="you@example.com"
+                  required
+                />
+              </div>
+            </>
           )}
           <div>
             <label className="text-sm font-medium">Phone</label>
@@ -135,6 +125,7 @@ const AuthModal = ({ type = "login", onClose }) => {
               onChange={handleChange}
               className="w-full border px-3 py-2 rounded mt-1"
               placeholder="Phone number"
+              required
             />
           </div>
           <div>
@@ -146,14 +137,17 @@ const AuthModal = ({ type = "login", onClose }) => {
               onChange={handleChange}
               className="w-full border px-3 py-2 rounded mt-1"
               placeholder="••••••••"
+              required
             />
           </div>
 
           <button
             type="submit"
-            className="bg-black text-white py-2 rounded hover:bg-gray-900"
+            disabled={loading}
+            className={`${loading ? "bg-gray-500 cursor-not-allowed" : "bg-black hover:bg-gray-900"
+              } text-white py-2 rounded`}
           >
-            {type === "login" ? "Login" : "Sign Up"}
+            {loading ? "Please wait..." : type === "login" ? "Login" : "Sign Up"}
           </button>
         </form>
       </div>
