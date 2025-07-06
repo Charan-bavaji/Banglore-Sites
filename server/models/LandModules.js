@@ -15,7 +15,7 @@ const LandSchema = new mongoose.Schema({
     waterandelectricity: String,
     distancefromL: String,
     emiloan: String,
-    images: [String], // 🆕 Add this line
+    images: [String],
 }, {
     timestamps: true
 });
