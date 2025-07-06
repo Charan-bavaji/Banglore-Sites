@@ -1,21 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const AllUserDetails = () => {
-  // Dummy user data – replace with real API data
-  const [users, setUsers] = useState([
-    { id: 1, name: "Alice Johnson", email: "alice@example.com" },
-    { id: 2, name: "Bob Smith", email: "bob@example.com" },
-    { id: 3, name: "Charlie Brown", email: "charlie@example.com" },
-    { id: 4, name: "David Lee", email: "david@example.com" },
-    { id: 5, name: "Ella Williams", email: "ella@example.com" },
-    { id: 6, name: "Frank Adams", email: "frank@example.com" },
-    { id: 7, name: "Grace Evans", email: "grace@example.com" },
-    { id: 8, name: "Henry Taylor", email: "henry@example.com" },
-  ]);
-
+  const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/v1/users/all");
+        setUsers(res.data);
+      } catch (err) {
+        toast.error("Failed to load users");
+        console.error(err);
+      }
+    };
+    fetchUsers();
+  }, []);
 
   const filteredUsers = users.filter(
     (user) =>
@@ -81,17 +85,16 @@ const AllUserDetails = () => {
         </table>
       </div>
 
-      {/* Pagination Controls */}
+      {/* Pagination */}
       <div className="flex justify-center mt-6 space-x-2">
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
             onClick={() => setCurrentPage(i + 1)}
-            className={`px-3 py-1 rounded ${
-              currentPage === i + 1
+            className={`px-3 py-1 rounded ${currentPage === i + 1
                 ? "bg-black text-white"
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
+              }`}
           >
             {i + 1}
           </button>

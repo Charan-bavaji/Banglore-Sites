@@ -4,6 +4,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const sendResetEmail = require('../utils/sendEmail');
+const nodemailer = require("nodemailer");
+const sendEmail = require("../utils/sendEmail");
 
 exports.register = async (req, res) => {
 
@@ -130,14 +132,38 @@ exports.createContact = async (req, res) => {
     try {
         const { firstName, lastName, email, phoneNumber, message } = req.body;
 
-        const newContact = await Contact.create({ firstName, lastName, email, phoneNumber, message });
+        const newContact = await Contact.create({
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            message,
+        });
 
-        return res.status(201).json({ message: "contact from submitted successfully", contact: newContact });
+        await sendEmail({
+            to: process.env.EMAIL_RECEIVER || process.env.EMAIL_USER,
+            subject: "New Contact Form Submission",
+            html: `
+        <h3>New Contact Submission</h3>
+        <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phoneNumber}</p>
+        <p><strong>Message:</strong><br>${message}</p>
+      `,
+        });
 
+        res.status(201).json({
+            message: "Contact form submitted and email sent successfully",
+            contact: newContact,
+        });
     } catch (error) {
-        return res.status(500).json({ message: "Error submitting contact form", error });
+        console.error("Contact form error:", error);
+        res.status(500).json({
+            message: "Error submitting contact form",
+            error: error.message,
+        });
     }
-}
+};
 
 exports.getAllContact = async (req, res) => {
     try {
@@ -147,3 +173,21 @@ exports.getAllContact = async (req, res) => {
         return res.status(500).json({ message: "Error submitting contact form", error });
     }
 }
+
+exports.getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find().select('name email phone role authProvider createdAt updatedAt');
+
+        res.status(200).json({
+            success: true,
+            count: users.length,
+            users,
+        });
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch users",
+        });
+    }
+};

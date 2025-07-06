@@ -123,20 +123,25 @@ const LandList = () => {
             <div className="text-center py-10">Loading lands...</div>
           ) : (
             <>
-              {currentLands.map((land) => (
-                <LandDetailedCard key={land._id} land={land} />
-              ))}
+              {currentLands.length > 0 ? (
+                currentLands.map((land) => (
+                  <LandDetailedCard key={land._id} land={land} />
+                ))
+              ) : (
+                <div className="text-center py-10 text-gray-600 text-lg font-medium">
+                  No lands found for this filter
+                </div>
+              )}
 
-              {/* Pagination Controls */}
-              {totalPages > 1 && (
+              {totalPages > 1 && currentLands.length > 0 && (
                 <div className="flex justify-center mt-6 space-x-2">
                   {Array.from({ length: totalPages }, (_, i) => (
                     <button
                       key={i}
                       onClick={() => setCurrentPage(i + 1)}
                       className={`px-3 py-1 rounded ${currentPage === i + 1
-                        ? "bg-black text-white"
-                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                          ? "bg-black text-white"
+                          : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                         }`}
                     >
                       {i + 1}
@@ -146,6 +151,7 @@ const LandList = () => {
               )}
             </>
           )}
+
         </div>
       </div>
     </div>

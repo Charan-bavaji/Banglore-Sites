@@ -7,7 +7,7 @@ const OtoB = () => {
   return (
     <div className="w-full flex flex-col items-center justify-center mt-10 px-4">
       {/* Header Section */}
-      <section className="bg-[#CCEC78] w-full py-10">
+      <section className="bg-[#CCEC78] w-full md:w-[60%] py-10 rounded-3xl">
         <div className="flex flex-col items-center justify-center text-center gap-3 text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-800">
           <h1>O to B</h1>
           <h1>Owner to Buyer Process</h1>

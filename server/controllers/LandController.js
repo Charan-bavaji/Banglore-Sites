@@ -55,17 +55,21 @@ exports.addLand = async (req, res) => {
 exports.getLandDetails = async (req, res) => {
     try {
         const land = await Lands.findById(req.params.id);
-        res.json({
+
+        if (!land) {
+            return res.status(404).json({ success: false, message: "Land not found" });
+        }
+
+        return res.status(200).json({
             success: true,
             land,
         });
-        if (!land) {
-            return res.status(404).json({ message: "land not found" })
-        }
     } catch (error) {
-        res.status(500).json({ message: "error loading land details" }, error);
+        console.error("Error fetching land:", error);
+        return res.status(500).json({ success: false, message: "Error loading land details" });
     }
-}
+};
+
 
 exports.updateLand = async (req, res) => {
     try {

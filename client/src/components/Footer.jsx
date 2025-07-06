@@ -3,9 +3,38 @@ import facebook from "../assets/square-facebook-brands.svg";
 import instagram from "../assets/square-instagram-brands.svg";
 import logo from "../assets/Add a heading (1).png";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 // import { Instagram, Twitter, Facebook, Whatsapp } from 'lucide-react';
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const handleSubscribe = async () => {
+    if (!email) {
+      toast.error("Email is required");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await axios.post("http://localhost:5000/api/v1/contactUs", {
+        firstName: "subscribe",
+        lastName: "subscribe",
+        email,
+        phoneNumber: "subscribe",
+        message: "subscribe",
+      });
+      toast.success("Subscribed successfully");
+      setEmail("");
+    } catch (err) {
+      toast.error("Subscription failed");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <footer className="bg-white border-t border-gray-300 px-6 py-8 text-sm text-gray-800">
       {/* Top section */}
@@ -36,10 +65,16 @@ const Footer = () => {
             <input
               type="email"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="border border-gray-400 rounded px-3 py-1 text-sm w-full"
             />
-            <button className="bg-[#7a9b00] text-white px-4 py-1.5 rounded hover:opacity-90">
-              subscribe
+            <button
+              onClick={handleSubscribe}
+              disabled={loading}
+              className="bg-[#7a9b00] text-white px-4 py-1.5 rounded hover:opacity-90 disabled:opacity-50"
+            >
+              {loading ? "Subscribing..." : "Subscribe"}
             </button>
           </div>
         </div>
@@ -58,10 +93,10 @@ const Footer = () => {
         </div>
 
         {/* Social icons */}
-        <div className="flex justify-center items-center gap-4 text-black">
+        {/* <div className="flex justify-center items-center gap-4 text-black">
           <img src={facebook} alt="" width={30} />
           <img src={instagram} alt="" width={30} />
-        </div>
+        </div> */}
 
         {/* Copyright */}
         <p className="text-xs text-gray-700 text-center md:text-right">
